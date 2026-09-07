@@ -1,0 +1,45 @@
+<button id="open-modal-message" @click="document.getElementById('modal-message').showModal()" command="show-modal" commandfor="modal-message" class="btn">{{ 'Open modal' | t:'default'  }}</button>
+<dialog id="modal-message" closedby="closerequest">
+    <button @click="document.getElementById('modal-message').close()" id="close-sign-up" commandfor="modal-message" command="close">
+        <svg aria-hidden="true" fill="currentColor" class"hover:scale-110" width="24" height="24" viewBox="0 0 24 24">
+            <g data-name="Layer 2">
+            	<g data-name="close">
+            		<rect width="24" height="24" transform="rotate(180 12 12)" opacity="0"/>
+            		<path d="M13.41 12l4.3-4.29a1 1 0 1 0-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 0 0-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l4.29-4.3 4.29 4.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"/>
+            	</g>
+            </g>
+        </svg>
+    </button>
+    <div>
+        <h3>Title</h3>
+        <p>A text</p>        
+    </div>
+    {% form 'contact' success:'Thank you for signing up!' error:'Form contains errors, please try again!' %}{% endform %}
+</dialog>
+<style>
+dialog::backdrop {
+  background: rgb(0 0 0 / 70%);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+dialog {
+  box-shadow: 0 19px 38px rgb(0 0 0 / 12%), 0 15px 12px rgb(0 0 0 / 22%);
+  margin: auto;
+  overscroll-behavior: contain;
+  position: relative;
+  padding: 1rem;
+  padding-top: 2rem;
+  width: 30rem;
+  max-width: 90%;
+}
+dialog button#close-sign-up {
+    position: absolute;
+    top: 1rem;
+    right: 0.8rem;
+    cursor: pointer;
+}
+dialog div {
+    padding: 1rem;
+    text-align: center;
+}
+</style>
