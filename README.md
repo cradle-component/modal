@@ -13,16 +13,17 @@ In a `layout`, `template` or `snippet` file, add the `amodal` component.
 ```
 
 To open a modal you should have a clickable element such as a `button` and set an `id` on it that the modal can `target`.
-
 ```
-<button id="my-contact" class="btn">{{ 'Open contact form' | t:'default'  }}</button>
+<button id="my-contact" class="btn">{{ 'Open contact form' | t }}</button>
 <a-modal target="my-contact" width="50em">   
   <h3>Contact form</h3>
-  {% form 'contact' success:'Thank you for signing up!' error:'Form contains errors, please try again!' %}{% endform %}
-  <p>We won't sell or share this information with anyone.</p>
+  {% form 'contact' success:'Thank you for contacting us!' error:'Form contains errors, please try again!' %}{% endform %}
+  <p>{{'We won't sell or share this information with anyone |t}}</p>
 </a-modal>
 {% component 'amodal' %}
 ```
+
+> You can have multiple `a-modal`s per page, just add links or buttons that triggers them.
 
 ### Customisation
 You pass configuration using html attributes on the `<a-modal ...>` tag.
