@@ -1,6 +1,7 @@
-<button id="open-modal-message" @click="document.getElementById('modal-message').showModal()" command="show-modal" commandfor="modal-message" class="btn">{{ 'Open modal' | t:'default'  }}</button>
-<dialog id="modal-message" closedby="closerequest">
-    <button @click="document.getElementById('modal-message').close()" id="close-sign-up" commandfor="modal-message" command="close">
+<template id="a-modal-template">
+<div x-data="{ ...modalDialog(), ...$el.parentElement.data() }">
+<dialog class="amodal" closedby="closerequest">
+    <button class="close" tabindex="0">
         <svg aria-hidden="true" fill="currentColor" class"hover:scale-110" width="24" height="24" viewBox="0 0 24 24">
             <g data-name="Layer 2">
             	<g data-name="close">
@@ -10,36 +11,123 @@
             </g>
         </svg>
     </button>
-    <div>
-        <h3>Title</h3>
-        <p>A text</p>        
-    </div>
-    {% form 'contact' success:'Thank you for signing up!' error:'Form contains errors, please try again!' %}{% endform %}
 </dialog>
+</div>
+</template>
 <style>
-dialog::backdrop {
+:root {
+    --a-modal-width: 30rem;
+}
+a-modal {
+    visibility: hidden;
+}
+dialog.amodal:focus {
+    outline: none;
+}
+dialog.amodal .wrapper {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+}
+dialog.amodal::backdrop {
   background: rgb(0 0 0 / 70%);
   overflow: hidden;
   overscroll-behavior: contain;
 }
-dialog {
+dialog.amodal {
   box-shadow: 0 19px 38px rgb(0 0 0 / 12%), 0 15px 12px rgb(0 0 0 / 22%);
   margin: auto;
   overscroll-behavior: contain;
   position: relative;
   padding: 1rem;
   padding-top: 2rem;
-  width: 30rem;
+  width: var(--a-modal-width);
   max-width: 90%;
 }
-dialog button#close-sign-up {
+dialog.amodal button.close {
     position: absolute;
     top: 1rem;
     right: 0.8rem;
     cursor: pointer;
 }
-dialog div {
-    padding: 1rem;
-    text-align: center;
-}
+
 </style>
+<script>
+    function modalDialog() { 
+        return {
+            target: undefined,
+            dialog: undefined,
+            infocus: undefined,
+             init() {
+                this.dialog = this.el.querySelector("dialog.amodal");
+                this.dialog.querySelector(".close").addEventListener('click',this.close.bind(this));
+                if(this.target) {
+                    document.getElementById(this.target).addEventListener('click', this.open.bind(this));
+                }
+                this.dialog.addEventListener("close",() => {
+                    document.activeElement.blur();
+                    if(this.infocus) this.infocus.focus();
+                });
+            },
+            open() {
+                // currently focused element which we restore on close
+                const ae = document.activeElement;
+                if(ae && ae.getAttribute("tabindex") != "-1") {
+                    this.infocus = ae;
+                }
+                this.dialog.showModal();
+                this.focus();
+            },
+            close() {
+                this.dialog.close();
+            },
+            focus(){
+                // set focus on first focusable element
+                let a = Array.from(this.dialog.querySelectorAll('button:not(.close), [href], input:not([type="hidden"], select, textarea, [tabindex]:not([tabindex="-1"])'));
+                if(a && a.length > 0) { 
+                    this.focused = a[0];
+                    this.focused.focus();
+                }
+            },
+            actions(e) {
+                if(e.type == "keydown") {
+                    // trigger action on ENTER
+                    if(e.keyCode == 13 && this.action) {
+                        this.action.click();
+                    }
+                }
+            }
+        }
+    }
+    // registers <a-modal> component
+    class amodalComponent extends HTMLElement {
+        #data
+        connectedCallback() {
+            // we don't use shadow DOM due to interaction with external dependencies
+            const template = document.getElementById('a-modal-template');
+            const content = document.createElement("div")
+            content.className = "wrapper";
+            content.innerHTML = this.innerHTML;
+            const amodal = template.content.cloneNode(true);
+            this.replaceChildren(amodal);
+            this.querySelector(".amodal").append(content);
+            this.#data = {el:this};
+            this.getAttributeNames().map(attr => {
+                this.#data[attr] = this.getAttribute(attr)
+            });
+            // :root css variables
+            if(this.#data.hasOwnProperty("width")) {
+                document.documentElement.style.setProperty("--a-modal-width",this.#data.width);
+            }
+        }
+    
+        data() {
+            return this.#data
+        }
+    }
+    customElements.get('a-modal') || customElements.define('a-modal', amodalComponent)
+</script>
