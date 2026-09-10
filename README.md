@@ -2,10 +2,9 @@
 
 <img width="771" height="769" alt="modal-open" src="https://github.com/user-attachments/assets/79c88767-1880-4773-8c7b-9c573409b2a0" />
 
-## installation
-Put the `amodal.liquid` file into your theme `components` folder.
-
 ## Installation
+
+Put the `amodal.liquid` file into your theme `components` folder.
 
 In a `layout`, `template` or `snippet` file, add the `amodal` component.
 
