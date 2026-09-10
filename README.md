@@ -15,11 +15,11 @@ In a `layout`, `template` or `snippet` file, add the `amodal` component.
 To open a modal you should have a clickable element such as a `button` and set an `id` on it that the modal can `target`.
 ```
 <button id="my-contact" class="btn">{{ 'Open contact form' | t }}</button>
-<a-modal target="my-contact" width="50em">   
+<a-modal target="my-contact" width="max-content">   
   <h3>{{'Contact form' | t}}</h3>
   {% form 'contact' success:'Thank you for contacting us!' error:'Form contains errors, please try again!' %}
   {% endform %}
-  <p>{{'We won't sell or share this information with anyone |t}}</p>
+  <p>{{"We won't sell or share this information with anyone" |t}}</p>
 </a-modal>
 {% component 'amodal' %}
 ```
