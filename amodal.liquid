@@ -87,7 +87,7 @@ dialog.amodal button.close {
             },
             focus(){
                 // sets focus on the first focusable element
-                let a = Array.from(this.dialog.querySelectorAll('button:not(.close), [href], input:not([type="hidden"]), select, textarea, [tabindex]:not([tabindex="-1"])'));
+                let a = Array.from(this.dialog.querySelectorAll('button:not(.close),input:not([type="hidden"]),[href],select,textarea,[tabindex]:not(:is([tabindex="-1"],.close))'));
                 if(a && a.length > 0) a[0].focus();
             }
         }
