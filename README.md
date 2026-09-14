@@ -29,14 +29,14 @@ To open a modal you should have a clickable element such as a `button` and set a
 > You can have multiple `a-modal`s per page, just add links or buttons that triggers them.
 
 ## Effects
-To add effects when the dialog opens or closes there is a couple of predefined effects you may use and combine.
-* fadein - fades in from opacity 0 -> 1
-* fadeout - fades out to opacity 0
-* popup - scales up from 0.5 -> 1
-* popout - scales up to 1.2 and opacity 0
-* popin - scales down to 0.8 and opacity 0
+To have effects when the dialog opens or closes you set the `effect` attribute with the effect names you want to apply.
+* `fadein` - fades in from opacity 0 -> 1
+* `fadeout` - fades out to opacity 0
+* `popup` - scales up from 0.5 -> 1
+* `popout` - scales up to 1.2 and opacity 0
+* `popin` - scales down to 0.8 and opacity 0
 
-You set the transition timing using the `timing` attribute.
+You set the animation timing using the `timing` attribute.
 
 ### popup dialog with a popout effect
 
