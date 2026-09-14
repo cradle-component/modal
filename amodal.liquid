@@ -25,6 +25,7 @@ a-modal {
     --b: rgb(0 0 0 / 70%);
     --g: 0.25rem;
     --p: 1rem;
+    --t: 0.3s;
 }
 dialog.amodal {
   box-shadow: var(--s);
@@ -33,15 +34,18 @@ dialog.amodal {
   position: relative;
   padding-top: 1rem;
   width: var(--w);
+  outline:none!important;
 }
+
 dialog.amodal::backdrop {
-  background: var(--b);
+  background-color: var(--b);
   overflow: hidden;
   overscroll-behavior: contain;
 }
-dialog.amodal:focus {
-    outline: none;
+dialog.amodal.closing::backdrop {
+  background-color:rgb(0 0 0 / 5%);
 }
+
 dialog.amodal button.close {
     position: absolute;
     top: 1rem;
@@ -54,6 +58,29 @@ dialog.amodal .content {
     align-items: var(--a);
     gap: var(--g);
     padding: var(--p);
+}
+/*  effects */
+dialog.amodal.effect {
+  transition: all ease var(--t);
+}
+@starting-style {
+  dialog[open].amodal.fadein {
+    opacity: 0;
+  }
+  dialog[open].amodal.popup {
+    transform: scale(0.6);
+  }
+}
+dialog[open].fadeout.closing {
+  opacity: 0;
+}
+dialog[open].popout.closing {
+  transform: scale(1.2);
+  opacity: 0;
+}
+dialog[open].popin.closing {
+  transform: scale(0.8);
+  opacity: 0;
 }
 
 </style>
@@ -87,6 +114,26 @@ dialog.amodal .content {
                 if(this.backdrop) {
                     this.el.style.setProperty("--b", this.backdrop);
                 }
+                if(this.timing) {
+                    this.el.style.setProperty("--t", this.timing);
+                }
+                // modal position
+                if(this.top) {
+                    this.dialog.style.setProperty("margin-top", this.top);
+                }
+                if(this.bottom) {
+                    this.dialog.style.setProperty("margin-bottom", this.bottom);
+                }
+                if(this.left) {
+                    this.dialog.style.setProperty("margin-left", this.left);
+                }
+                if(this.right) {
+                    this.dialog.style.setProperty("margin-right", this.right);
+                }
+                // effects
+                if(this.effect) {
+                    this.dialog.classList.add("effect", ...this.effect.split(" "));
+                }
                 this.dialog.addEventListener("close",() => {
                     document.activeElement.blur();
                     if(this.infocus) this.infocus.focus();
@@ -96,13 +143,22 @@ dialog.amodal .content {
                 // currently focused element which we restore on close
                 const ae = document.activeElement;
                 if(ae && ae.getAttribute("tabindex") != "-1") {
+                    console.log("infocus", ae)
                     this.infocus = ae;
                 }
                 this.dialog.showModal();
                 this.focus();
             },
             close() {
-                this.dialog.close();
+                document.activeElement.blur();
+                const d = this.dialog;
+                if(this.effect) {
+                    d.classList.add("closing");
+                    Promise.all(d.getAnimations({ subtree: true }).map(a => a.finished)).
+                    then(() => d.close()).then( () => d.classList.remove("closing"));
+                } else {
+                    d.close();
+                }
             },
             focus(){
                 // sets focus on the first focusable element
