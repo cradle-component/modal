@@ -36,7 +36,7 @@ To have effects when the dialog opens or closes you set the `effect` attribute w
 * `popout` - scales up to 1.2 and opacity 0
 * `popin` - scales down to 0.8 and opacity 0
 
-You set the animation timing using the `timing` attribute.
+You set the animation timing using the `timing` attribute, it also affects backdrop fade out.
 
 ### popup dialog with a popout effect
 
