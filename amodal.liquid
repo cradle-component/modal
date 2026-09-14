@@ -1,4 +1,4 @@
-<!-- CradleCMS modal dialog component, version 1.0.1; https://github.com/cradle-component/modal -->
+<!-- CradleCMS modal dialog component, version 1.1.0; https://github.com/cradle-component/modal -->
 <template id="a-modal-template">
 <div x-data="{ ...amodalDialog(), ...$el.parentElement.data() }">
 <dialog class="amodal" closedby="closerequest">
@@ -16,38 +16,31 @@
 </div>
 </template>
 <style>
-:root {
-    --a-modal-width: max-content;
-}
+
 a-modal {
     visibility: hidden;
-}
-dialog.amodal:focus {
-    outline: none;
-}
-dialog.amodal .wrapper {
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 0.25rem;
-    text-align: center;
-}
-dialog.amodal::backdrop {
-  background: rgb(0 0 0 / 70%);
-  overflow: hidden;
-  overscroll-behavior: contain;
+    --a: center;
+    --w: max-content;
+    --s: 0 19px 38px rgb(0 0 0 / 12%), 0 15px 12px rgb(0 0 0 / 22%);
+    --b: rgb(0 0 0 / 70%);
+    --g: 0.25rem;
+    --p: 1rem;
 }
 dialog.amodal {
-  box-shadow: 0 19px 38px rgb(0 0 0 / 12%), 0 15px 12px rgb(0 0 0 / 22%);
+  box-shadow: var(--s);
   margin: auto;
   overscroll-behavior: contain;
   position: relative;
-  padding: 1rem;
-  padding-top: 2rem;
-  width: var(--a-modal-width);
-  max-width: 90%;
+  padding-top: 1rem;
+  width: var(--w);
+}
+dialog.amodal::backdrop {
+  background: var(--b);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+dialog.amodal:focus {
+    outline: none;
 }
 dialog.amodal button.close {
     position: absolute;
@@ -55,6 +48,14 @@ dialog.amodal button.close {
     right: 0.8rem;
     cursor: pointer;
 }
+dialog.amodal .content {
+    display: flex;
+    flex-direction: column;
+    align-items: var(--a);
+    gap: var(--g);
+    padding: var(--p);
+}
+
 </style>
 <script>
     function amodalDialog() { 
@@ -67,6 +68,24 @@ dialog.amodal button.close {
                 this.dialog.querySelector(".close").addEventListener('click',this.close.bind(this));
                 if(this.target) {
                     document.getElementById(this.target).addEventListener('click', this.open.bind(this));
+                }
+                if(this.width) {
+                    this.el.style.setProperty("--w", this.width);
+                }
+                if(this.align) {
+                    this.el.style.setProperty("--a", this.align);
+                }
+                if(this.padding) {
+                    this.el.style.setProperty("--p", this.padding);
+                }
+                if(this.gap) {
+                    this.el.style.setProperty("--g", this.gap);
+                }
+                if(this.shadow) {
+                    this.el.style.setProperty("--s", this.shadow);
+                }
+                if(this.backdrop) {
+                    this.el.style.setProperty("--b", this.backdrop);
                 }
                 this.dialog.addEventListener("close",() => {
                     document.activeElement.blur();
@@ -88,7 +107,9 @@ dialog.amodal button.close {
             focus(){
                 // sets focus on the first focusable element
                 let a = Array.from(this.dialog.querySelectorAll('button:not(.close),input:not([type="hidden"]),[href],select,textarea,[tabindex]:not(:is([tabindex="-1"],.close))'));
-                if(a && a.length > 0) a[0].focus();
+                if(a && a.length > 0) {
+                    a[0].focus();
+                }
             }
         }
     }
@@ -99,7 +120,7 @@ dialog.amodal button.close {
             // we don't use shadow DOM due to interaction with external dependencies
             const template = document.getElementById('a-modal-template');
             const content = document.createElement("div")
-            content.className = "wrapper";
+            content.className = "content";
             content.innerHTML = this.innerHTML;
             const amodal = template.content.cloneNode(true);
             this.replaceChildren(amodal);
@@ -108,10 +129,6 @@ dialog.amodal button.close {
             this.getAttributeNames().map(attr => {
                 this.#data[attr] = this.getAttribute(attr)
             });
-            // :root css variables
-            if(this.#data.hasOwnProperty("width")) {
-                document.documentElement.style.setProperty("--a-modal-width",this.#data.width);
-            }
         }
     
         data() {
