@@ -36,12 +36,13 @@ dialog.amodal {
   outline:none!important;
 }
 dialog.amodal::backdrop {
+  transition: background-color var(--t) ease-in-out;
   background-color: var(--b);
   overflow: hidden;
   overscroll-behavior: contain;
 }
 dialog.amodal.closing::backdrop {
-  background-color:rgb(0 0 0 / 5%);
+  background-color:rgb(0 0 0 / 0);
 }
 dialog.amodal button.close {
     position: absolute;
@@ -67,14 +68,14 @@ dialog.amodal.effect {
     transform: scale(0.6);
   }
 }
-dialog[open].fadeout.closing {
+dialog[open].amodal.fadeout.closing {
   opacity: 0;
 }
-dialog[open].popout.closing {
+dialog[open].amodal.popout.closing {
   transform: scale(1.2);
   opacity: 0;
 }
-dialog[open].popin.closing {
+dialog[open].amodal.popin.closing {
   transform: scale(0.8);
   opacity: 0;
 }
