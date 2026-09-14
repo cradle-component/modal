@@ -1,4 +1,5 @@
-# Modal
+# Modal component
+This is a modal dialog component intended for <a href="https://cradlecms.com">Cradle CMS and eCommerce</a> themes.
 
 <img width="771" height="769" alt="modal-open" src="https://github.com/user-attachments/assets/79c88767-1880-4773-8c7b-9c573409b2a0" />
 
@@ -12,6 +13,7 @@ In a `layout`, `template` or `snippet` file, add the `amodal` component.
 {% component 'amodal' %}
 ```
 
+## Usage
 To open a modal you should have a clickable element such as a `button` and set an `id` on it that the modal can `target`.
 ```
 <button id="my-contact" class="btn">{{ 'Open contact form' | t }}</button>
@@ -26,7 +28,7 @@ To open a modal you should have a clickable element such as a `button` and set a
 
 > You can have multiple `a-modal`s per page, just add links or buttons that triggers them.
 
-## effects
+## Effects
 To add effects when the dialog opens or closes there is a couple of predefined effects you may use and combine.
 * fadein - fades in from opacity 0 -> 1
 * fadeout - fades out to opacity 0
@@ -36,7 +38,8 @@ To add effects when the dialog opens or closes there is a couple of predefined e
 
 You set the transition timing using the `timing` attribute.
 
-### popup dialog with popout effect
+### popup dialog with a popout effect
+
 ```
 button id="my-contact" class="btn">{{ 'Open contact form' | t }}</button>
 <a-modal target="my-contact" effect="popup popout" timing="0.4s">   
