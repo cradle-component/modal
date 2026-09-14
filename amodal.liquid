@@ -16,7 +16,6 @@
 </div>
 </template>
 <style>
-
 a-modal {
     visibility: hidden;
     --a: center;
@@ -36,7 +35,6 @@ dialog.amodal {
   width: var(--w);
   outline:none!important;
 }
-
 dialog.amodal::backdrop {
   background-color: var(--b);
   overflow: hidden;
@@ -45,7 +43,6 @@ dialog.amodal::backdrop {
 dialog.amodal.closing::backdrop {
   background-color:rgb(0 0 0 / 5%);
 }
-
 dialog.amodal button.close {
     position: absolute;
     top: 1rem;
@@ -59,7 +56,6 @@ dialog.amodal .content {
     gap: var(--g);
     padding: var(--p);
 }
-/*  effects */
 dialog.amodal.effect {
   transition: all ease var(--t);
 }
@@ -82,7 +78,6 @@ dialog[open].popin.closing {
   transform: scale(0.8);
   opacity: 0;
 }
-
 </style>
 <script>
     function amodalDialog() { 
@@ -143,7 +138,6 @@ dialog[open].popin.closing {
                 // currently focused element which we restore on close
                 const ae = document.activeElement;
                 if(ae && ae.getAttribute("tabindex") != "-1") {
-                    console.log("infocus", ae)
                     this.infocus = ae;
                 }
                 this.dialog.showModal();
