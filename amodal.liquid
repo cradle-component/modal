@@ -35,6 +35,9 @@ dialog.amodal {
   width: var(--w);
   outline:none!important;
 }
+dialog.amodal:open {
+    border: 0;
+}
 dialog.amodal::backdrop {
   transition: background-color var(--t) ease-in-out;
   background-color: var(--b);
@@ -49,6 +52,8 @@ dialog.amodal button.close {
     top: 1rem;
     right: 0.8rem;
     cursor: pointer;
+    background: transparent;
+    border: none;
 }
 dialog.amodal .content {
     display: flex;
@@ -56,6 +61,7 @@ dialog.amodal .content {
     align-items: var(--a);
     gap: var(--g);
     padding: var(--p);
+    justify-content: start;
 }
 dialog.amodal.effect {
   transition: all ease var(--t);
@@ -88,10 +94,19 @@ dialog[open].amodal.popin.closing {
             infocus: undefined,
             init() {
                 this.dialog = this.el.querySelector("dialog.amodal");
-                this.dialog.querySelector(".close").addEventListener('click',this.close.bind(this));
+                this.dialog.querySelector(".close").addEventListener('click',(ev) => {
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                    this.close();
+                });
                 if(this.target) {
-                    document.getElementById(this.target).addEventListener('click', this.open.bind(this));
+                    document.getElementById(this.target).addEventListener('click', (ev) => {
+                        ev.stopPropagation();
+                        ev.preventDefault();
+                        this.open();
+                    });
                 }
+                
                 if(this.width) {
                     this.el.style.setProperty("--w", this.width);
                 }
@@ -130,7 +145,9 @@ dialog[open].amodal.popin.closing {
                 if(this.effect) {
                     this.dialog.classList.add("effect", ...this.effect.split(" "));
                 }
-                this.dialog.addEventListener("close",() => {
+                this.dialog.addEventListener("close",(ev) => {
+                    ev.stopPropagation();
+                    ev.preventDefault();
                     document.activeElement.blur();
                     if(this.infocus) this.infocus.focus();
                 });
@@ -189,3 +206,5 @@ dialog[open].amodal.popin.closing {
     }
     customElements.get('a-modal') || customElements.define('a-modal', amodalComponent)
 </script>
+
+
