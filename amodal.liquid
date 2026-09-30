@@ -39,7 +39,7 @@ dialog.amodal:open {
 }
 dialog.amodal::backdrop {
   transition: background-color var(--t) ease-in-out;
-  background-color: var(--b);
+  background-color: var(--b); /* safari on ios does not support variables on backdrop */
   overflow: hidden;
   overscroll-behavior: contain;
 }
